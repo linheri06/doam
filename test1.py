@@ -56,7 +56,7 @@ def main():
     args.dec_in = 2
     args.c_out = 2
     args.target = "soilMoisture"
-    args.root_path = './dataset/'
+    args.root_path = './'
     args.data_path ='data_input.csv'
     args.model_id='temperature_humidity'
     args.model = 'Transformer'

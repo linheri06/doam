@@ -71,6 +71,9 @@ import numpy as np
 from exp.exp_main import Exp_Main
 from data_provider.data_factory import data_provider
 from utils.tools import dotdict
+from datetime import datetime
+import csv,os
+from predict_t import PredictionTool
 
 app = Flask(__name__)
 
@@ -89,41 +92,37 @@ def index():
 
     if request.method == 'POST':
         try:
-            # Lấy dữ liệu từ form và chuyển thành mảng float
-            input_series = [float(request.form[f'hour_{i}']) for i in range(1, 36)]
+            # # Lấy dữ liệu từ form và chuyển thành mảng float
+            # input_series = [float(request.form[f'hour_{i}']) for i in range(1, 36)]
+
+            # Lấy dữ liệu từ form
+            humidity_data = [float(request.form[f'hour_moisture_{i}']) for i in range(1, 37)]
+            temperature_data = [float(request.form[f'hour_temperature_{i}']) for i in range(1, 37)]
+
+            # Lưu dữ liệu vào file CSV
+            file_name = 'input_series.csv'
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Lấy thời gian hiện tại
+
+            # Tạo tên file
+            file_name = 'input_series.csv'
+
+            # Kiểm tra nếu file đã tồn tại, xóa file cũ
+            if os.path.isfile(file_name):
+                os.remove(file_name)
+
+            with open(file_name, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['date', 'soilMoisture', 'airTemperature'])
+                # Ghi dữ liệu từng giờ với timestamp
+                for i in range(len(humidity_data)):
+                    writer.writerow([timestamp, humidity_data[i], temperature_data[i]])
         except ValueError:
             return "Vui lòng nhập dữ liệu kiểu số."
 
         try:
-            # Khởi tạo class Exp_Main
-            exp = Exp_Main(configs)
-            input_tensor = torch.tensor(input_series, dtype=torch.float32).view(1, -1, 1)
-
-            # Lấy dữ liệu từ data_provider
-            pred_data, pred_loader = exp._get_data(flag='pred')
-
-            preds = []
-            print("Đang xử lý dự đoán...")
-            with torch.no_grad():
-                for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(pred_loader):
-                    batch_x = batch_x.float().to(exp.device)
-                    batch_y = batch_y.float()
-                    batch_x_mark = batch_x_mark.float().to(exp.device)
-                    batch_y_mark = batch_y_mark.float().to(exp.device)
-
-                    outputs, _ = exp._predict(batch_x, batch_y, batch_x_mark, batch_y_mark)
-                    pred = outputs.detach().cpu().numpy()
-                    preds.append(pred)
-
-            # Gộp dự đoán
-            preds = np.concatenate(preds, axis=0)
-
-            # Dự đoán bằng model 3-hour
-            with torch.no_grad():
-                input_tensor = input_tensor.to(torch.device('cpu'))
-                output_3h = model_3h(input_tensor)
-                predictions_3h = output_3h.squeeze().tolist()
-
+            model_3h = "final_model.pth"
+            predictions_3h = PredictionTool(file_name, model_3h).predict()
+            
         except Exception as e:
             return f"Có lỗi xảy ra trong quá trình dự đoán: {str(e)}"
 
