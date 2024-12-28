@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập 24 dữ liệu lưu lượng nước đến theo giờ trước đó</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            overflow-y: auto;
+            height: 90vh;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            width: 22%;
+            margin-bottom: 10px;
+        }
+        label {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nhập 24 dữ liệu lưu lượng nước đến theo giờ trước đó</h1>
+        <form action="/" method="post">
+            {% for i in range(1, 37) %}
+                <div class="input-group">
+                    <label for="hour_{{ i }}">Lưu lượng nước đến theo giờ thứ {{ i }}:</label>
+                    <input type="text" id="hour_{{ i }}" name="hour_{{ i }}" required>
+                </div>
+            {% endfor %}
+            <button type="submit">Dự đoán lưu lượng nước đến</button>
+        </form>
+        {% if predictions_3h %}
+            <div class="results">
+                <h2>Kết quả dự đoán lưu lượng nước đến cho 3 giờ lần lượt là</h2>
+                <ul>
+                    {% for prediction in predictions_3h %}
+                        <li>{{ prediction }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

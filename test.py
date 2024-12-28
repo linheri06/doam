@@ -28,25 +28,33 @@ input_tensor = input_tensor.view(1, -1, 1)
 
 
 print(f"Input tensor shape: {input_tensor.shape}")
+# configs = Configs()
+# model = Model(configs)
+# model.load_state_dict(torch.load('final_model_3hour.pth', map_location=torch.device('cpu'), weights_only=True))
+# model.to(torch.device('cpu'))
+
+# # 4. Prepare inputs for the model
+# x_enc = input_tensor  # Encoder input
+# x_mark_enc = time_tensor  # Time features for encoder
+# x_dec = input_tensor[:, -configs.pred_len:, :]  # Decoder input (e.g., last `label_len` timesteps)
+# x_mark_dec = time_tensor[:, -configs.pred_len:, :]  # Time features for decoder
+
+
+# with torch.no_grad():
+#     # input_tensor = input_tensor.to(torch.device('cpu'))
+#     # output = model(input_tensor)
+#     x_enc = x_enc.to(torch.device('cpu'))
+#     x_mark_enc = x_mark_enc.to(torch.device('cpu'))
+#     x_dec = x_dec.to(torch.device('cpu'))
+#     x_mark_dec = x_mark_dec.to(torch.device('cpu'))
+
+#     output = model(x_enc, x_mark_enc, x_dec, x_mark_dec)
+# print(output)
 configs = Configs()
 model = Model(configs)
 model.load_state_dict(torch.load('final_model_3hour.pth', map_location=torch.device('cpu'), weights_only=True))
 model.to(torch.device('cpu'))
-
-# 4. Prepare inputs for the model
-x_enc = input_tensor  # Encoder input
-x_mark_enc = time_tensor  # Time features for encoder
-x_dec = input_tensor[:, -configs.pred_len:, :]  # Decoder input (e.g., last `label_len` timesteps)
-x_mark_dec = time_tensor[:, -configs.pred_len:, :]  # Time features for decoder
-
-
 with torch.no_grad():
-    # input_tensor = input_tensor.to(torch.device('cpu'))
-    # output = model(input_tensor)
-    x_enc = x_enc.to(torch.device('cpu'))
-    x_mark_enc = x_mark_enc.to(torch.device('cpu'))
-    x_dec = x_dec.to(torch.device('cpu'))
-    x_mark_dec = x_mark_dec.to(torch.device('cpu'))
-
-    output = model(x_enc, x_mark_enc, x_dec, x_mark_dec)
+    input_tensor = input_tensor.to(torch.device('cpu'))
+    output = model(input_tensor)
 print(output)

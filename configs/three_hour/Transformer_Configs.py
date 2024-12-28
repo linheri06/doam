@@ -45,7 +45,7 @@ class Configs:
         self.dec_in = 2
         self.c_out = 2
         self.target = "soilMoisture"
-        self.root_path = './data_set/'
+        self.root_path = './dataset/'
         self.data_path = 'temperature_humidity_tran1.csv'
         self.model_id = 'temperature_humidity'
         self.model = 'Transformer'

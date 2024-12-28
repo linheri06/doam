@@ -75,10 +75,6 @@ def main():
     exp.model.eval()
 
     pred_data, pred_loader = exp._get_data(flag='pred')
-    # preds = []
-    # #exp.predict()
-
-    # print(pred_data.data_x)
 
     preds = []
     print(enumerate(pred_loader))
