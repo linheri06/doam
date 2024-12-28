@@ -15,8 +15,8 @@ class Configs:
         self.bucket_size = 4
         self.n_hashes = 4
         self.seq_len = 36
-        self.label_len = 1
-        self.pred_len = 36
+        self.label_len = 36
+        self.pred_len = 1
         self.e_layers = 2
         self.d_layers = 1
         self.n_heads = 8

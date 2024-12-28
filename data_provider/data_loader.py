@@ -380,7 +380,7 @@ class Dataset_Pred(Dataset):
         r_end = r_begin + self.label_len + self.pred_len
 
         seq_x = self.data_x[s_begin:s_end]
-        if self.inverse:
+        if self.inverse.any():
             seq_y = self.data_x[r_begin:r_begin + self.label_len]
         else:
             seq_y = self.data_y[r_begin:r_begin + self.label_len]

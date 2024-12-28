@@ -58,7 +58,7 @@ class Exp_Main(Exp_Basic):
         dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len:, :]).float()
         dec_inp = torch.cat([batch_y[:, :self.args.label_len, :], dec_inp], dim=1).float().to(self.device)
         # encoder - decoder
-
+        
         def _run_model():
             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
             if self.args.output_attention:
@@ -70,7 +70,7 @@ class Exp_Main(Exp_Basic):
                 outputs = _run_model()
         else:
             outputs = _run_model()
-
+        print("thanhlamchooooooo")
         f_dim = -1 if self.args.features == 'MS' else 0
         outputs = outputs[:, -self.args.pred_len:, f_dim:]
         batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
